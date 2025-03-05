@@ -102,24 +102,23 @@ func New(width int, height int, c1 string, c2 string, chance float64, operation 
 	}
 
 	n.fillImage()
-	return n, nil
-}
 
-func (n *noisy) SaveAsPNG() {
-	height := n.height
-	width := n.width
 	img := image.NewRGBA(image.Rect(0, 0, width, height))
 	// img.Pix is the underlying image in image; this is an []uint8
 	img.Pix = n.imageData
 	n.image = img
 
+	return n, nil
+}
+
+func (n *noisy) SaveAsPNG() {
 	file, err := os.Create(n.filename + ".png")
 	if err != nil {
 		panic(err)
 	}
 	defer file.Close()
 
-	if err := png.Encode(file, img); err != nil {
+	if err := png.Encode(file, n.image); err != nil {
 		panic(err)
 	}
 }
