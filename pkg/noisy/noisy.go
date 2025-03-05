@@ -123,6 +123,10 @@ func (n *noisy) SaveAsPNG() {
 	}
 }
 
+func (n *noisy) GetImage() *image.RGBA {
+	return n.image
+}
+
 func (n *noisy) fillImage() {
 	rows := n.height
 	cols := n.width
