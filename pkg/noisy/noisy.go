@@ -102,11 +102,10 @@ func New(width int, height int, c1 string, c2 string, chance float64, operation 
 	}
 
 	n.fillImage()
-	n.draw()
 	return n, nil
 }
 
-func (n *noisy) draw() {
+func (n *noisy) SaveAsPNG() {
 	height := n.height
 	width := n.width
 	img := image.NewRGBA(image.Rect(0, 0, width, height))
