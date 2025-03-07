@@ -5,7 +5,7 @@ import (
 )
 
 func TestExpectErrorOnNegativeHeight(t *testing.T) {
-	n := noisy{
+	n := Noisy{
 		width:  -10,
 		height: 10,
 	}

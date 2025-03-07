@@ -11,7 +11,7 @@ import (
 
 type noiseimagetype []uint8
 
-type noisy struct {
+type Noisy struct {
 	imageData noiseimagetype
 	width     int
 	height    int
@@ -54,14 +54,14 @@ func init() {
 	operationMap["simplex"] = Simplex
 }
 
-func New(width int, height int, c1 string, c2 string, chance float64, operation string, filename string, simplex float64) (*noisy, error) {
+func New(width int, height int, c1 string, c2 string, chance float64, operation string, filename string, simplex float64) (*Noisy, error) {
 	// Extract operation
 	op, err := translateOperation(operation)
 	if err != nil {
 		return nil, err
 	}
 
-	n := &noisy{
+	n := &Noisy{
 		width:     width,
 		height:    height,
 		operation: op,
@@ -111,7 +111,7 @@ func New(width int, height int, c1 string, c2 string, chance float64, operation 
 	return n, nil
 }
 
-func (n *noisy) SaveAsPNG() {
+func (n *Noisy) SaveAsPNG() {
 	file, err := os.Create(n.filename + ".png")
 	if err != nil {
 		panic(err)
@@ -123,11 +123,11 @@ func (n *noisy) SaveAsPNG() {
 	}
 }
 
-func (n *noisy) GetImage() *image.RGBA {
+func (n *Noisy) GetImage() *image.RGBA {
 	return n.image
 }
 
-func (n *noisy) fillImage() {
+func (n *Noisy) fillImage() {
 	rows := n.height
 	cols := n.width
 	// Create a flat slice to hold RGBA data
@@ -145,7 +145,7 @@ func (n *noisy) fillImage() {
 	}
 }
 
-func (n *noisy) generateWhiteNoise(cols, rows int) {
+func (n *Noisy) generateWhiteNoise(cols, rows int) {
 	imageData := make([]uint8, rows*cols*4)
 	var wg sync.WaitGroup
 	for i := range rows {
@@ -166,7 +166,7 @@ func (n *noisy) generateWhiteNoise(cols, rows int) {
 	n.imageData = imageData
 }
 
-func (n *noisy) getNextColor() [4]uint8 {
+func (n *Noisy) getNextColor() [4]uint8 {
 	if n.operation == Color {
 		return randomIntArray8()
 	}
@@ -184,7 +184,7 @@ func (n *noisy) getNextColor() [4]uint8 {
 	return [4]uint8{0, 0, 0, 0}
 }
 
-func (n *noisy) validate() error {
+func (n *Noisy) validate() error {
 	switch n.operation {
 	case White:
 		return n.isValidWhiteNoise()
@@ -197,7 +197,7 @@ func (n *noisy) validate() error {
 	}
 }
 
-func (n *noisy) isValidWhiteNoise() error {
+func (n *Noisy) isValidWhiteNoise() error {
 	err := n.validateDimensions()
 	if err != nil {
 		return err
@@ -205,7 +205,7 @@ func (n *noisy) isValidWhiteNoise() error {
 	return nil
 }
 
-func (n *noisy) isValidColorNoise() error {
+func (n *Noisy) isValidColorNoise() error {
 	err := n.validateDimensions()
 	if err != nil {
 		return err
@@ -213,7 +213,7 @@ func (n *noisy) isValidColorNoise() error {
 	return nil
 }
 
-func (n *noisy) isValidSimplexNoise() error {
+func (n *Noisy) isValidSimplexNoise() error {
 	err := n.validateDimensions()
 	if err != nil {
 		return err
@@ -221,7 +221,7 @@ func (n *noisy) isValidSimplexNoise() error {
 	return nil
 }
 
-func (n *noisy) validateDimensions() error {
+func (n *Noisy) validateDimensions() error {
 	if n.height < 0 {
 		return fmt.Errorf("height cannot be under 0")
 	}
